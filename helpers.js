@@ -1,24 +1,31 @@
 
 var TO_RADIANS = Math.PI/180;
-function drawRotatedImage(image, x, y, angle) {
- 
+function drawRotatedImage(context, image, x, y, angle) {
+
 	// save the current co-ordinate system
 	// before we screw with it
 	context.save();
- 
+
 	// move to the middle of where we want to draw our image
 	context.translate(x, y);
- 
+
 	// rotate around that point, converting our
 	// angle from degrees to radians
 	context.rotate(angle * TO_RADIANS);
- 
+
 	// draw it up and to the left by half the width
 	// and height of the image
 	context.drawImage(image, -(image.width/2), -(image.height/2));
- 
+
 	// and restore the co-ords to how they were when we began
 	context.restore();
+}
+
+function speedXY (rotation, speed) {
+	return {
+		x: Math.sin(rotation * TO_RADIANS) * speed,
+		y: Math.cos(rotation * TO_RADIANS) * speed * -1,
+	};
 }
 
 function rotatePoint (coords, angle, distance) {
@@ -28,15 +35,34 @@ function rotatePoint (coords, angle, distance) {
 	};
 }
 
-function drawPoint (xy) {
+function drawPoint (context, xy) {
 	context.fillRect(xy.x,xy.y,1,1);
+}
+
+var images = {};
+function getImage(src){
+	return images[src] || function(){
+		var img = new Image();
+		img.src = src;
+		images[src] = img;
+		return img;
+	}();
+}
+function preload(sources){
+	sources.forEach(function(src, i){
+		getImage(src);
+	});
+}
+
+function drawSprite(context, img, left, top, width, height, x, y){
+	context.drawImage(img, left, top, width, height, x, y, width, height);
 }
 
 function distance (from, to) {
 	var a = from.x > to.x ? from.x - to.x : to.x - from.x,
 		b = from.y > to.y ? from.y - to.y : to.y - from.y
 		;
-	return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2))
+	return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 }
 
 /**
