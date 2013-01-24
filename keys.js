@@ -32,14 +32,14 @@ window.addEventListener('keydown', function(e){
 	var key = getKey(e.which);
 	if (key){
 		key.down = true;
+		e.preventDefault();
 	}
-	e.preventDefault();
 });
 window.addEventListener('keyup', function(e){
 	console.log('keyup', e.which);
 	var key = getKey(e.which);
 	if (key){
 		key.down = true;
+		e.preventDefault();
 	}
-	e.preventDefault();
 });
