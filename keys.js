@@ -9,11 +9,11 @@ Key.prototype = {
 };
 
 var keys = {
-	UP:    new Key(38),
-	DOWN:  new Key(40),
-	LEFT:  new Key(37),
-	RIGHT: new Key(39),
-	SPACE: new Key(32)
+	up:    new Key(38),
+	down:  new Key(40),
+	left:  new Key(37),
+	right: new Key(39),
+	space: new Key(32)
 };
 
 function getKey(code){
@@ -39,7 +39,7 @@ window.addEventListener('keyup', function(e){
 	console.log('keyup', e.which);
 	var key = getKey(e.which);
 	if (key){
-		key.down = true;
+		key.down = false;
 		e.preventDefault();
 	}
 });

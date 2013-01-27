@@ -1,4 +1,4 @@
-/*global images,measuring,TO_RADIANS,Sprite */
+/*global keys,images,measuring,TO_RADIANS,Sprite, Ship, Invader, InvaderLine */
 
 var canvas  = document.getElementById('canvas'),
 	c       = canvas.getContext('2d'),
@@ -9,24 +9,42 @@ var canvas  = document.getElementById('canvas'),
 images.context = measuring.context = c;
 
 // setup sprites
-var sprites = images.getImage('sprites.png'),
-	invader1 = new Sprite(sprites, 32, 16, [[10,523]]),
-	invader2 = new Sprite(sprites, 32, 16, [[131,523]]),
-	ship     = new Sprite(sprites, 28, 16, [[272, 551]]),
-	bullet   = new Sprite(sprites, 28, 18, [[191, 523]])
+var sprites = images.getImage('sprites.png');
+
+// elements
+var ship = new Ship(),
+	bullets = [],
+	invaders = new InvaderLine({ x: 100, y: 70 })
 ;
 
-var x=10,y=10;
+// set up environment
+function step () {
+	if (keys.left.down){
+		ship.jumpLeft();
+	}
+	if (keys.right.down){
+		ship.jumpRight();
+	}
+	if (keys.space.down && ship.canShoot()){
+		ship.shoot();
+	}
+	bullets.forEach(function(bullet, i){
+		if (bullet.inView()){
+			bullet.move();
+		}
+	});
+	invaders.move();
+}
 
+// draw environment
 function draw () {
 	c.clearRect(0, 0, w, h);
 	c.fillRect(0,0,w,h);
-	invader1.draw(0, 50, 50);
-	invader2.draw(0, 150, 50);
-	ship.draw(0, 50, 450);
-	bullet.draw(0, 50, 250);
-}
-function step () {
+	ship.draw();
+	bullets.forEach(function(bullet, i){
+		bullet.draw();
+	});
+	invaders.draw();
 }
 function frame () {
 	step();
