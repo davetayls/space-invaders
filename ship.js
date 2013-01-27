@@ -1,7 +1,7 @@
 /*global Bullet,bullets,Sprite,sprites,w,h*/
 function Ship(){
 	this.x = Math.floor(w/2);
-	this.y = Math.floor(h*0.9);
+	this.y = Math.floor(h*0.95);
 
 	this.sprite = new Sprite(sprites, this.w, this.h, [[272, 551]]);
 }
