@@ -2,24 +2,35 @@
 <html>
 	<head>
 		<title>Space Invaders</title>
+		<meta name="viewport" content="width=500" />
 		<style type="text/css">
 			body {
 				text-align: center;
 				font-family: monospace;
+				margin: 0;
+				padding: 0;
 			}
 			#canvas {
 				display: block;
 				border: solid 1px #ccc;
 				margin: 0 auto;
 			}
+			#controls {
+				padding-top: 5px;
+			}
+			#controls button {
+				width: 30%;
+				height: 40px;
+			}
 		</style>
 	</head>
 	<body>
-		<h1>Space Invaders</h1>
 		<canvas id="canvas" width="500" height="500"></canvas>
-		<p>
-			Sprites from <a href="http://gooperblooper22.deviantart.com/art/Space-Invaders-Sprite-Sheet-135338373">http://gooperblooper22.deviantart.com/art/Space-Invaders-Sprite-Sheet-135338373</a>
-		</p>
+		<div id="controls">
+			<button id="btn-left">LEFT</button>
+			<button id="btn-shoot">SHOOT</button>
+			<button id="btn-right">RIGHT</button>
+		</div>
 
 
 		<script src="polyfills.js"></script>
