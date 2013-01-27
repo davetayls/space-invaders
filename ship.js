@@ -12,9 +12,16 @@ Ship.prototype = {
 	h: 16,
 	jump: 4,
 	lastBullet: new Date().getTime(),
-	timeBetweenBullets: 1000,
+	timeBetweenBullets: 500,
 	draw: function(){
-		this.sprite.draw(0, this.x, this.y);
+		var o = this.offset();
+		this.sprite.draw(0, this.x - o.x, this.y - o.y);
+	},
+	offset: function(){
+		return {
+			x: Math.floor(this.w/2),
+			y: Math.floor(this.h/2)
+		};
 	},
 	jumpLeft: function(){
 		this.x-=this.jump;

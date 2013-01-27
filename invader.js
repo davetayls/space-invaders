@@ -7,8 +7,9 @@ var INVADER_SPRITES = {
 
 function Invader(opt){
 	this.sprite = new Sprite(sprites, this.w, this.h, [
-		[10, 523], // green
-		[131, 523] // pink
+		[10, 523],  // green
+		[131, 523], // pink
+		[191, 523]  // hit
 	]);
 	this.x = opt.x || this.x;
 	this.y = opt.y || this.y;
@@ -22,14 +23,21 @@ Invader.prototype = {
 	jump: 4,
 	spriteIndex: INVADER_SPRITES.GREEN,
 	draw: function(){
-		this.sprite.draw(this.spriteIndex, this.x, this.y);
+		var o = this.offset();
+		this.sprite.draw(this.spriteIndex, this.x - o.x, this.y - o.y);
+	},
+	offset: function(){
+		return {
+			x: Math.floor(this.w/2),
+			y: Math.floor(this.h/2)
+		};
 	},
 	move: function(){
 		this.y-=this.jump;
-		this.y = this.y < -50 ? -50 : this.y;
+		this.y = this.y < -100 ? -100 : this.y;
 	},
 	checkHit: function(xy){
-		this.isHit = measuring.distance({ x: this.x, y: this.y }, xy) < 10;
+		this.isHit = measuring.distance({ x: this.x, y: this.y }, xy) < 20;
 		if (this.isHit){
 			this.spriteIndex = INVADER_SPRITES.HIT;
 		}
@@ -68,7 +76,7 @@ InvaderLine.prototype = {
 	},
 	onEdge: function(){
 		var onRight = this.x + this.width() >= (w - 25),
-			onLeft  = this.x <= 25
+			onLeft  = this.x <= 50
 		;
 		return { left: onLeft, right: onRight };
 	},

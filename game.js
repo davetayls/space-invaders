@@ -31,6 +31,7 @@ function step () {
 	bullets.forEach(function(bullet, i){
 		if (bullet.inView()){
 			bullet.move();
+			invaders.checkHit(bullet.getXY());
 		}
 	});
 	invaders.move();
@@ -39,6 +40,7 @@ function step () {
 // draw environment
 function draw () {
 	c.clearRect(0, 0, w, h);
+	// c.fillStyle = '#fff';
 	c.fillRect(0,0,w,h);
 	ship.draw();
 	bullets.forEach(function(bullet, i){
