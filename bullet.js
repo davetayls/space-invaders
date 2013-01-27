@@ -11,6 +11,8 @@ Bullet.prototype = {
 	w: 28,
 	h: 12,
 	jump: 4,
+	destroyed: false,
+
 	getXY: function(){
 		return { x: this.x, y: this.y };
 	},
@@ -21,8 +23,10 @@ Bullet.prototype = {
 		};
 	},
 	draw: function(){
-		var o = this.offset();
-		this.sprite.draw(0, this.x - o.x, this.y - o.y);
+		if (!this.destroyed){
+			var o = this.offset();
+			this.sprite.draw(0, this.x - o.x, this.y - o.y);
+		}
 	},
 	move: function(){
 		this.y-=this.jump;

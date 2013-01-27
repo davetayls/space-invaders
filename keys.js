@@ -28,7 +28,7 @@ function getKey(code){
 
 // Keyboard event listeners
 window.addEventListener('keydown', function(e){
-	console.log('keydown', e.which);
+	// console.log('keydown', e.which);
 	var key = getKey(e.which);
 	if (key){
 		key.down = true;
@@ -36,7 +36,7 @@ window.addEventListener('keydown', function(e){
 	}
 });
 window.addEventListener('keyup', function(e){
-	console.log('keyup', e.which);
+	// console.log('keyup', e.which);
 	var key = getKey(e.which);
 	if (key){
 		key.down = false;

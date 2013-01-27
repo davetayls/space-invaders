@@ -1,4 +1,4 @@
-/*global Sprite,sprites,w,h, measuring*/
+/*global Sprite,sprites,w,h, measuring,eachClean*/
 var INVADER_SPRITES = {
 	GREEN: 0,
 	PINK: 1,
@@ -11,6 +11,7 @@ function Invader(opt){
 		[131, 523], // pink
 		[191, 523]  // hit
 	]);
+	this.spriteIndex = opt.spriteIndex || this.spriteIndex;
 	this.x = opt.x || this.x;
 	this.y = opt.y || this.y;
 }
@@ -37,9 +38,19 @@ Invader.prototype = {
 		this.y = this.y < -100 ? -100 : this.y;
 	},
 	checkHit: function(xy){
-		this.isHit = measuring.distance({ x: this.x, y: this.y }, xy) < 20;
-		if (this.isHit){
+		var isHit = measuring.distance({ x: this.x, y: this.y }, xy) < 20;
+		if (!this.isHit && isHit){
+			this.isHit = new Date().getTime();
 			this.spriteIndex = INVADER_SPRITES.HIT;
+			return true;
+		}
+		return false;
+	},
+	isDestroyed: function(){
+		if (this.isHit){
+			var since = new Date().getTime() - this.isHit;
+			console.log(since);
+			return since > 1000;
 		}
 	}
 };
@@ -51,6 +62,7 @@ function InvaderLine(opt){
 	var self = this;
 	[0, 50, 100, 150, 200, 250].forEach(function(x, i){
 		self.invaders.push(new Invader({
+			spriteIndex: opt.spriteIndex || 0,
 			x: x + self.x,
 			y: 0
 		}));
@@ -60,10 +72,10 @@ InvaderLine.prototype = {
 	x: 0,
 	y: 0,
 	spacing: 50,
-	jump: 25,
+	jump: 10,
 	jumpDir: 1, // 1 for right, -1 for left
 	lastMove: new Date().getTime(),
-	moveWait: 1000,
+	moveWait: 100,
 	draw: function(){
 		var self = this;
 		this.invaders.forEach(function(invader, i){
@@ -72,7 +84,8 @@ InvaderLine.prototype = {
 		});
 	},
 	width: function(){
-		return this.spacing * this.invaders.length;
+		this.w = this.w || this.spacing * this.invaders.length;
+		return this.w;
 	},
 	onEdge: function(){
 		var onRight = this.x + this.width() >= (w - 25),
@@ -97,16 +110,25 @@ InvaderLine.prototype = {
 
 		if (new Date().getTime() - this.lastMove > this.moveWait){
 			this.x+= jump;
-			this.invaders.forEach(function(invader, i){
+			eachClean(this.invaders, function(invader, i){
 				invader.x+= jump;
+				if (invader.isDestroyed()){
+					return true;
+				}
 			});
 			this.lastMove = new Date().getTime();
 		}
 	},
 	checkHit: function(xy){
-		this.invaders.forEach(function(invader){
-			invader.checkHit(xy);
-		});
+		var hit = false,
+			ln  = this.invaders.length;
+		while(ln--){
+			if (this.invaders[ln].checkHit(xy)){
+				console.log('hit');
+				hit = true;
+			}
+		}
+		return hit;
 	}
 };
 
