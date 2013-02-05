@@ -21,6 +21,7 @@ Invader.prototype = {
 	w: 32,
 	h: 16,
 	isHit: false,
+	points: 10,
 	jump: 4,
 	spriteIndex: INVADER_SPRITES.GREEN,
 	draw: function(){
@@ -42,6 +43,7 @@ Invader.prototype = {
 		if (!this.isHit && isHit){
 			this.isHit = new Date().getTime();
 			this.spriteIndex = INVADER_SPRITES.HIT;
+			addScore(this.points);
 			return true;
 		}
 		return false;
@@ -49,7 +51,6 @@ Invader.prototype = {
 	isDestroyed: function(){
 		if (this.isHit){
 			var since = new Date().getTime() - this.isHit;
-			console.log(since);
 			return since > 1000;
 		}
 	}
@@ -73,9 +74,11 @@ InvaderLine.prototype = {
 	y: 0,
 	spacing: 50,
 	jump: 10,
+	jumpY: 25,
+	jumpYEdge: 'left',
 	jumpDir: 1, // 1 for right, -1 for left
 	lastMove: new Date().getTime(),
-	moveWait: 100,
+	moveWait: 300,
 	draw: function(){
 		var self = this;
 		this.invaders.forEach(function(invader, i){
@@ -94,24 +97,40 @@ InvaderLine.prototype = {
 		return { left: onLeft, right: onRight };
 	},
 	getJump: function(){
-		var edge = this.onEdge();
+		var edge = this.onEdge(),
+			y    = 0
+		;
 		if (edge.left){
 			this.jumpDir = 1;
+			if (this.jumpYEdge !== 'left'){
+				y = this.jumpY;
+				this.jumpYEdge = 'left';
+			}
 		}
 		if (edge.right){
 			this.jumpDir = -1;
+			if (this.jumpYEdge !== 'right'){
+				y = this.jumpY;
+				this.jumpYEdge = 'right';
+			}
 		}
-		return this.jump * this.jumpDir;
+		return {
+			y: y,
+			x: y === 0 ? this.jump * this.jumpDir : 0
+		};
+	},
+	getJumpY: function(){
+
 	},
 	move: function(){
-		var self = this,
-			jump = this.getJump()
-		;
+		var self = this, jump;
 
 		if (new Date().getTime() - this.lastMove > this.moveWait){
-			this.x+= jump;
+			jump = this.getJump();
+			this.x+= jump.x;
+			this.y+= jump.y;
 			eachClean(this.invaders, function(invader, i){
-				invader.x+= jump;
+				invader.x+= jump.x;
 				if (invader.isDestroyed()){
 					return true;
 				}
@@ -124,7 +143,6 @@ InvaderLine.prototype = {
 			ln  = this.invaders.length;
 		while(ln--){
 			if (this.invaders[ln].checkHit(xy)){
-				console.log('hit');
 				hit = true;
 			}
 		}
