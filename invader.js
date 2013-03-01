@@ -78,7 +78,7 @@ InvaderLine.prototype = {
 	jumpYEdge: 'left',
 	jumpDir: 1, // 1 for right, -1 for left
 	lastMove: new Date().getTime(),
-	moveWait: 300,
+	moveWait: 100,
 	draw: function(){
 		var self = this;
 		this.invaders.forEach(function(invader, i){

@@ -31,6 +31,15 @@ function invadersLeft(){
 	});
 	return left;
 }
+function lowestLine(){
+	var highestY = -1;
+	invaders.forEach(function(line, i){
+		if (line.y > highestY && line.invaders.length){
+			highestY = line.y;
+		}
+	});
+	return highestY;
+}
 
 // score
 var score = 0,
@@ -104,8 +113,15 @@ function step () {
 				line.move();
 			});
 
+			// check if you have won
 			if (!invadersLeft()){
 				state = states.WON;
+				gameEndTime = new Date().getTime();
+			}
+
+			// check if you have lost
+			if (lowestLine() > h - 60){
+				state = states.LOST;
 				gameEndTime = new Date().getTime();
 			}
 			break;
@@ -145,6 +161,12 @@ function draw () {
 			c.fillStyle = '#fff';
 			c.fillText('You have WON! Your score is '+ score +'. time: '+ finalTime(), 10, h-20);
 			break;
+		case states.LOST:
+			logo.draw(0, (w/2)-170, 100);
+			c.font = '18px Arial';
+			c.fillStyle = '#fff';
+			c.fillText('You have LOST!', 10, h-20);
+			break;
 	}
 }
 function frame () {
@@ -167,3 +189,6 @@ function eachClean(arr, fn){
 		}
 	}
 }
+Array.prototype.eachClean = function(fn){
+	return eachClean(this, fn);
+};

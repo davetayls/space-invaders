@@ -50,15 +50,15 @@ var images = {
 
 };
 
-function Sprite(img, width, height, positions){
-    this.img = img;
-    this.width = width;
-    this.height = height;
-    this.positions = positions;
-}
-Sprite.prototype = {
-    draw: function(position, x, y){
-        var pos = this.positions[position];
-        images.drawSprite(this.img, pos[0], pos[1], this.width, this.height, x, y);
+    function Sprite(img, width, height, positions){
+        this.img = img;
+        this.width = width;
+        this.height = height;
+        this.positions = positions;
     }
-};
+    Sprite.prototype = {
+        draw: function(position, x, y){
+            var pos = this.positions[position];
+            images.drawSprite(this.img, pos[0], pos[1], this.width, this.height, x, y);
+        }
+    };
