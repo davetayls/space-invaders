@@ -1,4 +1,4 @@
-/*global keys,images,measuring,TO_RADIANS,Sprite, Ship, Invader, InvaderLine, INVADER_SPRITES */
+/*global keys,images,measuring,TO_RADIANS,Sprite, Ship, Invader, InvaderLine, InvaderLineCollection, INVADER_SPRITES */
 
 var canvas  = document.getElementById('canvas'),
 	c       = canvas.getContext('2d'),
@@ -18,28 +18,12 @@ var sprites = images.getImage('sprites.png'),
 // elements
 var ship = new Ship(),
 	bullets = [],
-	invaders = [
+	invaders = new InvaderLineCollection([
 		new InvaderLine({ x: 50, y: 50 }),
 		new InvaderLine({ x: 50, y: 100, spriteIndex: INVADER_SPRITES.PINK }),
 		new InvaderLine({ x: 50, y: 150 })
-	]
+	])
 ;
-function invadersLeft(){
-	var left = 0;
-	invaders.forEach(function(line, i){
-		left += line.invaders.length;
-	});
-	return left;
-}
-function lowestLine(){
-	var highestY = -1;
-	invaders.forEach(function(line, i){
-		if (line.y > highestY && line.notHit().length){
-			highestY = line.y;
-		}
-	});
-	return highestY;
-}
 
 // score
 var score = 0,
@@ -114,13 +98,13 @@ function step () {
 			});
 
 			// check if you have won
-			if (!invadersLeft()){
+			if (!invaders.invadersLeft()){
 				state = states.WON;
 				gameEndTime = new Date().getTime();
 			}
 
 			// check if you have lost
-			if (lowestLine() > h - 60){
+			if (invaders.lowestLine() > h - 60){
 				state = states.LOST;
 				gameEndTime = new Date().getTime();
 			}
@@ -146,9 +130,7 @@ function draw () {
 			bullets.forEach(function(bullet, i){
 				bullet.draw();
 			});
-			invaders.forEach(function(line){
-				line.draw();
-			});
+			invaders.draw();
 			c.font = '12px Arial';
 			c.fillStyle = '#fff';
 			c.fillText('Time: '+ gameTime(), 10, h-20);

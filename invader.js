@@ -78,7 +78,7 @@ InvaderLine.prototype = {
 	jumpYEdge: 'left',
 	jumpDir: 1, // 1 for right, -1 for left
 	lastMove: new Date().getTime(),
-	moveWait: 100,
+	moveWait: 300,
 	draw: function(){
 		var self = this;
 		this.invaders.forEach(function(invader, i){
@@ -159,3 +159,38 @@ InvaderLine.prototype = {
 	}
 };
 
+
+/**
+ * InvaderLineCollection
+ *
+ * a collection of invader lines
+ */
+var InvaderLineCollection = function(lines){
+	this.lines = lines;
+};
+InvaderLineCollection.prototype = {
+	invadersLeft: function(){
+		var left = 0;
+		this.lines.forEach(function(line, i){
+			left += line.invaders.length;
+		});
+		return left;
+	},
+	lowestLine: function(){
+		var highestY = -1;
+		this.lines.forEach(function(line, i){
+			if (line.y > highestY && line.notHit().length){
+				highestY = line.y;
+			}
+		});
+		return highestY;
+	},
+	draw: function(){
+		this.lines.forEach(function(line){
+			line.draw();
+		});
+	},
+	forEach: function(fn){
+		return this.lines.forEach(fn);
+	}
+};
