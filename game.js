@@ -34,7 +34,7 @@ function invadersLeft(){
 function lowestLine(){
 	var highestY = -1;
 	invaders.forEach(function(line, i){
-		if (line.y > highestY && line.invaders.length){
+		if (line.y > highestY && line.notHit().length){
 			highestY = line.y;
 		}
 	});

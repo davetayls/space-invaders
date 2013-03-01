@@ -147,6 +147,15 @@ InvaderLine.prototype = {
 			}
 		}
 		return hit;
+	},
+	notHit: function(){
+		var notHit = [];
+		this.invaders.forEach(function(invader){
+			if (!invader.isHit){
+				notHit.push(invader);
+			}
+		});
+		return notHit;
 	}
 };
 
