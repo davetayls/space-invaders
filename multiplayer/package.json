@@ -1,0 +1,11 @@
+{
+  "name": "space-invaders",
+  "local": true,
+  "version": "0.0.0",
+  "description": "a basic space invaders game",
+  "main": "server.js",
+  "dependencies": {
+    "express": "2.5.1",
+    "socket.io": "0.9.13"
+  }
+}
