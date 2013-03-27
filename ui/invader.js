@@ -74,11 +74,11 @@ InvaderLine.prototype = {
 	y: 0,
 	spacing: 50,
 	jump: 10,
-	jumpY: 25,
+	jumpY: 50,
 	jumpYEdge: 'left',
 	jumpDir: 1, // 1 for right, -1 for left
 	lastMove: new Date().getTime(),
-	moveWait: 300,
+	moveWait: 100,
 	draw: function(){
 		var self = this;
 		this.invaders.forEach(function(invader, i){
