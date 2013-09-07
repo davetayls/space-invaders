@@ -25,13 +25,26 @@ app.listen(3000);
   */
 var io = sio.listen(app);
 
+var nicks = {};
+
 io.sockets.on('connection', function(socket){
+
     socket.on('join', function(name){
-        socket.nickname = name;
-        socket.broadcast.emit('newplayer', name);
+        if (!nicks[name]){
+            nicks[name] = socket;
+            socket.nickname = name;
+            socket.broadcast.emit('newplayer', name);
+        } else {
+            socket.nickname = name;
+            socket.broadcast.emit('reconnect', name);
+        }
     });
+
     socket.on('key', function(name){
-        console.log('key:'+name);
         socket.broadcast.emit('key', socket.nickname, name);
     });
 });
+
+
+
+
