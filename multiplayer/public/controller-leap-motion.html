@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Multiplayer Space Invaders</title>
+        <meta name="viewport" content="width=500" />
+        <link rel="stylesheet" href="ui/index.css">
+        <style>
+            #controls .btn { height: 200px; }
+        </style>
+    </head>
+    <body>
+        <script src="/socket.io/socket.io.js"></script>
+
+        <!--
+        leap motion controller
+        =============================
+        -->
+        <style type="text/css">
+            #output {
+                font-family: monospace;
+                white-space: pre;
+            }
+        </style>
+        <div id="output"></div>
+        <script src="lib/leap.js"></script>
+        <script src="controller-leap-motion.js"></script>
+
+    </body>
+</html>

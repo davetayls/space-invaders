@@ -1,60 +1,59 @@
 <!doctype html>
 <html>
-	<head>
-		<meta property="og:title"       content="Space Invaders" />
-		<meta property="og:type"        content="game" />
-		<meta property="og:url"         content="http://the-taylors.org/space-invaders" />
-		<meta property="og:image"       content="http://the-taylors.org/space-invaders/ui/avatar.png" />
-		<meta property="og:site_name"   content="HTML5 Space Invaders Game" />
-		<meta property="og:description" content="This is a simple space invaders game." />
-		<meta property="fb:admins"      content="753920161" />
+    <head>
+        <meta property="og:title"       content="Space Invaders" />
+        <meta property="og:type"        content="game" />
+        <meta property="og:url"         content="http://the-taylors.org/space-invaders" />
+        <meta property="og:image"       content="http://the-taylors.org/space-invaders/ui/avatar.png" />
+        <meta property="og:site_name"   content="HTML5 Space Invaders Game" />
+        <meta property="og:description" content="This is a simple space invaders game." />
+        <meta property="fb:admins"      content="753920161" />
 
-		<title>Multiplayer Space Invaders</title>
-		<meta name="viewport" content="width=500" />
+        <title>Multiplayer Space Invaders</title>
+        <meta name="viewport" content="width=500" />
 
-		<link rel="stylesheet" href="ui/index.css">
+        <link rel="stylesheet" href="ui/index.css">
 
-		<style>
-			body {
-				background: #000;
-				overflow: hidden;
-			}
-			#canvas {
-				border: none;
-			}
-		</style>
-	</head>
-	<body>
-		<canvas id="canvas" width="900" height="700"></canvas>
-		<div id="controls">
-			<button id="btn-left">LEFT</button>
-			<button id="btn-shoot">SHOOT</button>
-			<button id="btn-right">RIGHT</button>
-		</div>
-		<div id="keys">
-			Keys: Left / Right / Space to shoot<br />
-			As time passes invaders are worth less points
-		</div>
+        <style>
+            body {
+                background: #000;
+                overflow: hidden;
+            }
+            #canvas {
+                border: none;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="canvas" width="900" height="700"></canvas>
+        <div id="controls">
+            <button id="btn-left">LEFT</button>
+            <button id="btn-shoot">SHOOT</button>
+            <button id="btn-right">RIGHT</button>
+        </div>
+        <div id="keys">
+            Keys: Left / Right / Space to shoot<br />
+            As time passes invaders are worth less points
+        </div>
 
-		<script src="/socket.io/socket.io.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
 
-		<script src="ui/polyfills.js"></script>
-		<script src="ui/measuring.js"></script>
-		<script src="ui/images.js"></script>
-		<script src="ui/keys.js"></script>
-		<script src="ui/bullet.js"></script>
-		<script src="ui/invader.js"></script>
-		<script src="ui/ship.js"></script>
+        <script src="ui/polyfills.js"></script>
+        <script src="ui/measuring.js"></script>
+        <script src="ui/images.js"></script>
+        <script src="ui/keys.js"></script>
+        <script src="ui/bullet.js"></script>
+        <script src="ui/invader.js"></script>
+        <script src="ui/ship.js"></script>
 
-		<script src="ui/game.js"></script>
+        <script src="ui/game.js"></script>
 
-		<script>
-			/*global socket,prompt,io */
-			window.onload = function(){
-			    var socket = io.connect();
-			    socket.on('connect', function(){
+        <script>
+            window.onload = function(){
+                var socket = io.connect();
+                socket.on('connect', function(){
 
-			    	var nicks = {};
+                    var nicks = {};
 
                     function getPlayer(nickname){
                         if (nicks[nickname]){
@@ -67,36 +66,36 @@
                         }
                     }
 
-			        // send a join event with your name
-			        // socket.emit('join', 'master');
-			        socket.on('newplayer', function(nickname){
-			        	var player = getPlayer(nickname);
+                    // send a join event with your name
+                    // socket.emit('join', 'master');
+                    socket.on('newplayer', function(nickname){
+                        var player = getPlayer(nickname);
                         console.log(nickname +' has joined the game');
-			        });
+                    });
 
                     socket.on('reconnect', function(nickname){
                         getPlayer(nickname);
                         console.log(nickname +' is back in the game');
                     });
 
-			        socket.on('key', function(nickname, key){
-			        	var player = getPlayer(nickname);
-			        	if (player){
-				        	for (var k in player.keys){
-				        		player.keys[k].down = false;
-				        	}
-				        	key.split(' ').forEach(function(k){
-				        		if (player.keys[k]){
-				        			player.keys[k].down = true;
-				        		}
-				        	});
-			        	}
-			        });
-			    });
+                    socket.on('key', function(nickname, key){
+                        var player = getPlayer(nickname);
+                        if (player){
+                            for (var k in player.keys){
+                                player.keys[k].down = false;
+                            }
+                            key.split(' ').forEach(function(k){
+                                if (player.keys[k]){
+                                    player.keys[k].down = true;
+                                }
+                            });
+                        }
+                    });
+                });
 
-			};
+            };
 
-		</script>
+        </script>
 
-	</body>
+    </body>
 </html>

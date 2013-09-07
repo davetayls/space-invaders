@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Multiplayer Space Invaders</title>
+		<meta name="viewport" content="width=500" />
+		<link rel="stylesheet" href="ui/index.css">
+		<style>
+			#controls .btn { height: 200px; }
+		</style>
+	</head>
+	<body>
+		<div id="controls">
+			<button class="btn" id="btn-left">LEFT</button>
+			<button class="btn" id="btn-shoot">SHOOT</button>
+			<button class="btn" id="btn-right">RIGHT</button>
+		</div>
+		<div id="keys">
+			Keys: Left / Right / Space to shoot<br />
+			As time passes invaders are worth less points
+		</div>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="ui/keys.js"></script>
+
+
+
+       <!--
+           keyboard and touch controller
+           =============================
+           Change this to create a different controller
+       -->
+		<script src="controller-keyboard-touch.js"></script>
+
+	</body>
+</html>

@@ -8,6 +8,8 @@ body {
     display: block;
     border: solid 1px #ccc;
     margin: 0 auto;
+    max-width: 100%;
+    height: auto;
 }
 #controls {
     padding-top: 5px;

@@ -1,9 +1,24 @@
 /*global Bullet,bullets,Sprite,KeySet,sprites,w,h*/
+
+var shipCount = 0;
+
 function Ship(){
 	this.x = Math.floor(w/2);
 	this.y = Math.floor(h*0.95);
 
-	this.sprite = new Sprite(sprites, this.w, this.h, [[272, 551]]);
+    var spr = [
+        [272, 551], // blue
+        [276, 228], // green
+        [393, 387], // dark green
+        [186, 627], // little blue thing
+        [283, 699]
+    ];
+	this.sprite = new Sprite(sprites, this.w, this.h, spr);
+
+    this.spriteIndex = shipCount % spr.length;
+    console.log(this.spriteIndex);
+    this.playerNumber = shipCount;
+    shipCount++;
 }
 Ship.prototype = {
 	x: 0,
@@ -13,9 +28,11 @@ Ship.prototype = {
 	jump: 4,
 	lastBullet: new Date().getTime(),
 	timeBetweenBullets: 500,
+    spriteIndex: 0,
+
 	draw: function(){
 		var o = this.offset();
-		this.sprite.draw(0, this.x - o.x, this.y - o.y);
+		this.sprite.draw(this.spriteIndex, this.x - o.x, this.y - o.y);
 	},
 	offset: function(){
 		return {
@@ -59,5 +76,9 @@ Player.prototype = {
 		if (this.ship){
 			this.ship.draw();
 		}
+        c.font = '12px Arial';
+        c.fillStyle = '#fff';
+        c.textAlign = 'center';
+        c.fillText(this.nickname, this.ship.x, h-10);
 	}
 }
