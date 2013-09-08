@@ -47,6 +47,15 @@ function addScore(points){
 	timeDecay = timeDecay < 0.3 ? 0.3 : timeDecay;
 	score += Math.ceil(points * timeDecay);
 }
+function winningPlayer(){
+    var winning, points = 0;
+    players.forEach(function(player){
+        if (player.ship.points > points){
+            winning = player;
+        }
+    });
+    return winning;
+}
 
 // state
 var states = {
@@ -88,11 +97,15 @@ function step () {
 			eachClean(bullets, function(bullet, i){
 				if (bullet.inView() && !bullet.destroyed){
 					bullet.move();
+                    var points = 0;
 					invaders.forEach(function(line){
-						if (line.checkHit(bullet.getXY())){
+                        hitPoints = line.checkHit(bullet.getXY());
+                        if (hitPoints > 0){
 							bullet.destroyed = true;
 						}
+                        points += hitPoints;
 					});
+                    bullet.ship.points += points;
 				} else {
 					return true;
 				}
@@ -125,6 +138,7 @@ function draw () {
 	switch (state){
 		case states.NOT_STARTED:
 			logo.draw(0, (w/2)-170, 100);
+            c.textAlign = 'left';
 			c.font = '18px Arial';
 			c.fillStyle = '#fff';
 			c.fillText('Press any key to start', 10, h-20);
@@ -137,22 +151,28 @@ function draw () {
 				bullet.draw();
 			});
 			invaders.draw();
+            c.textAlign = 'left';
 			c.font = '12px Arial';
 			c.fillStyle = '#fff';
 			c.fillText('Time: '+ gameTime(), 10, h-20);
 			c.font = '16px Arial';
-			c.fillText('Score: '+ score, 10, h-40);
+			c.fillText('Score: '+ players.map(function(player){
+                return player.nickname +': '+ player.ship.points;
+            }).join(', '), 10, h-40);
 			break;
 		case states.WON:
+            var win = winningPlayer();
 			logo.draw(0, (w/2)-170, 100);
+            c.textAlign = 'left';
 			c.font = '18px Arial';
 			c.fillStyle = '#fff';
-			c.fillText('You have WON! Your score is '+ score +'. time: '+ finalTime(), 10, h-20);
+			c.fillText(win.nickname +' has WON! Your score is '+ win.ship.points +'. time: '+ finalTime(), 10, h-20);
 			break;
 		case states.LOST:
 			logo.draw(0, (w/2)-170, 100);
 			c.font = '18px Arial';
 			c.fillStyle = '#fff';
+            c.textAlign = 'left';
 			c.fillText('You have LOST!', 10, h-20);
 			break;
 	}

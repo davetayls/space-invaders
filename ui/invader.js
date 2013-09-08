@@ -43,10 +43,10 @@ Invader.prototype = {
 		if (!this.isHit && isHit){
 			this.isHit = new Date().getTime();
 			this.spriteIndex = INVADER_SPRITES.HIT;
-			addScore(this.points);
-			return true;
+//			addScore(this.points);
+			return this.points;
 		}
-		return false;
+		return 0;
 	},
 	isDestroyed: function(){
 		if (this.isHit){
@@ -139,14 +139,12 @@ InvaderLine.prototype = {
 		}
 	},
 	checkHit: function(xy){
-		var hit = false,
+		var points = 0,
 			ln  = this.invaders.length;
 		while(ln--){
-			if (this.invaders[ln].checkHit(xy)){
-				hit = true;
-			}
+            points += this.invaders[ln].checkHit(xy);
 		}
-		return hit;
+		return points;
 	},
 	notHit: function(){
 		var notHit = [];

@@ -5,6 +5,7 @@ var shipCount = 0;
 function Ship(){
 	this.x = Math.floor(w/2);
 	this.y = Math.floor(h*0.95);
+    this.points = 0;
 
     var spr = [
         [272, 551], // blue
